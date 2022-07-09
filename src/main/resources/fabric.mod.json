@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "funmod",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Fun Mod",
+  "description": "Me having fun modding minecraft doing whatever i want :)",
   "authors": [
-    "Me!"
+    "iluvpy"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
@@ -14,16 +14,16 @@
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/funmod/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "net.funmod.com.InitMod"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "funmod.mixins.json"
   ],
 
   "depends": {
