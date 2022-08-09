@@ -7,7 +7,8 @@
   ],
   "client": [
     "MainMixin",
-    "RenderMixin"
+    "RenderMixin",
+    "DoubleJumpMixin"
   ],
   "injectors": {
     "defaultRequire": 1

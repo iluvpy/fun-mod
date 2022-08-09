@@ -13,6 +13,7 @@ public class RenderMixin {
     @Inject(at = @At("TAIL"), method = "render")
     private void render(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         MinecraftClient.getInstance().textRenderer.draw(matrices, "Fun mod 1.0", 20.0f, 20.0f, 0);
+
     }
 
 }

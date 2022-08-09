@@ -1,7 +1,10 @@
 package net.funmod.com;
 
 import net.fabricmc.api.ModInitializer;
-import net.funmod.com.Scaffold.Scaffold;
+import net.funmod.com.Commands.ModCommands;
+import net.funmod.com.Cheats.Fly;
+import net.funmod.com.Cheats.Scaffold;
+import net.funmod.com.Cheats.DoubleJump;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,8 +21,11 @@ public class InitMod implements ModInitializer {
 		// Proceed with mild caution.
 
 		LOGGER.info("Hello Fabric world!");
+		ModCommands.register();
 		Scaffold.register();
 		Scaffold.initListener();
 		Scaffold.initScaffold();
+		Fly.registerFly();
+		DoubleJump.register();
 	}
 }
