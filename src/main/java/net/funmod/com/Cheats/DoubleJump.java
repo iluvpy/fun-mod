@@ -2,6 +2,7 @@ package net.funmod.com.Cheats;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.funmod.com.Util.SimpleKeyBinding;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -12,18 +13,14 @@ import org.lwjgl.glfw.GLFW;
 
 public class DoubleJump {
     private static int jumps;
-    private static boolean active;    private static KeyBinding keyBinding;
+    private static boolean active;
+    private static SimpleKeyBinding keyBinding;
     private static boolean lastFrameJumping;
     private static boolean thisFrameJumping;
     public static void register() {
         jumps = 0;
         active = false;
-        keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "Double jump",
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_Y,
-                "Cheats"
-        ));
+        keyBinding = SimpleKeyBinding.init(InputUtil.GLFW_KEY_G);
 
         lastFrameJumping = false;
         thisFrameJumping = false;
@@ -31,6 +28,7 @@ public class DoubleJump {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (client.player == null) {return;}
             thisFrameJumping = client.player.input.jumping;
+            keyBinding.update();
             if (keyBinding.wasPressed()) {
                 active = !active;
                 client.player.sendMessage(Text.literal("Double Jump " + (active ? "Enabled" : "Disabled")));
@@ -50,6 +48,7 @@ public class DoubleJump {
                 jumps++;
             }
             lastFrameJumping = thisFrameJumping;
+            keyBinding.reset();
         });
 
     }

@@ -2,6 +2,8 @@ package net.funmod.com.Cheats;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.funmod.com.Util.SimpleKeyBinding;
+import net.funmod.com.Util.Util;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.KeyBinding;
@@ -19,31 +21,26 @@ import org.lwjgl.glfw.GLFW;
 
 public class Scaffold {
 
-    private static KeyBinding keyBinding;
+    private static SimpleKeyBinding keyBinding;
     private static boolean scaffoldActive;
 
     public static void register() {
-        keyBinding = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "Scaffold",
-                InputUtil.Type.KEYSYM,
-                GLFW.GLFW_KEY_N,
-                "Cheats"
-        ));
+        keyBinding = SimpleKeyBinding.init(GLFW.GLFW_KEY_N);
         scaffoldActive = false;
+        initScaffold();
     }
 
-    public static void initListener() {
+
+
+    private static void initScaffold() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            while (keyBinding.wasPressed()) {
-                assert client.player != null;
+            if (client.player == null) return;
+            keyBinding.update();
+            if (keyBinding.wasPressed()) {
                 scaffoldActive = !scaffoldActive;
-                client.player.sendMessage(Text.literal("Scaffold: " + (scaffoldActive ? "Enabled" : "Disabled")), false);
+                Util.sendCheatActivation("Scaffold", scaffoldActive);
             }
-        });
-    }
 
-    public static void initScaffold() {
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (scaffoldActive) {
                 assert client.player != null;
                 assert client.world != null;
@@ -70,10 +67,11 @@ public class Scaffold {
 
                 }
             }
+            keyBinding.reset();
         });
     }
 
-    public static char getFacing(ClientPlayerEntity player) {
+    private static char getFacing(ClientPlayerEntity player) {
         float yaw = player.getYaw();
         if (yaw > -45.0f && yaw < 45.0f) {
             return 'S'; // south
