@@ -6,12 +6,10 @@ import net.funmod.com.Util.Util;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.List;
-import java.util.function.Predicate;
 
 public class Killaura {
     private static SimpleKeyBinding keyBinding;
@@ -33,15 +31,17 @@ public class Killaura {
                 Vec3d playerPos = MinecraftClient.getInstance().player.getPos();
                 List<PlayerEntity> players = MinecraftClient.getInstance().world.getEntitiesByClass(PlayerEntity.class,
                         new Box(playerPos.x - ENTITIY_SEARCH_RANGE, playerPos.y - ENTITIY_SEARCH_RANGE, playerPos.z - ENTITIY_SEARCH_RANGE,
-                                playerPos.x + ENTITIY_SEARCH_RANGE, playerPos.y + ENTITIY_SEARCH_RANGE, playerPos.z + ENTITIY_SEARCH_RANGE),
-                        new Predicate<PlayerEntity>() {
-                            @Override
-                            public boolean test(PlayerEntity playerEntity) {
-                                return true;
-                            }
-                        });
+                                playerPos.x + ENTITIY_SEARCH_RANGE, playerPos.y + ENTITIY_SEARCH_RANGE, playerPos.z + ENTITIY_SEARCH_RANGE), PlayerEntity::isMainPlayer);
+
+
                 for (PlayerEntity player: players) {
-                    Util.displayMessage("player found nearby: " + player.getName().getString());
+                    Vec3d otherPlayerPos = player.getPos();
+                    double distance = Math.abs(otherPlayerPos.x - playerPos.x + otherPlayerPos.y - playerPos.y + otherPlayerPos.z - playerPos.z);
+                    Util.displayMessage("distance from " + player.getName().getString() + " " + (int)distance + " blocks!");
+                    if (distance < 3) {
+                        MinecraftClient.getInstance().player.lookAt(player.getCommandSource().getEntityAnchor(), otherPlayerPos);
+                        MinecraftClient.getInstance().player.attack(player);
+                    }
                 }
             }
 

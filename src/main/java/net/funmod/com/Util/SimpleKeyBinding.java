@@ -1,5 +1,8 @@
 package net.funmod.com.Util;
 
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.ChatScreen;
+
 public class SimpleKeyBinding {
 
     int keyCodeBinding;
@@ -35,15 +38,20 @@ public class SimpleKeyBinding {
     }
 
     public boolean wasPressed() {
-        return thisFrameKeyDown && !lastFrameLastFrameKeyDown;
+        return thisFrameKeyDown && !lastFrameLastFrameKeyDown && !chatOpen();
     }
 
     public boolean isDown() {
-        return thisFrameKeyDown;
+        return thisFrameKeyDown && !chatOpen();
     }
 
     public boolean wasReleased() {
-        return lastFrameLastFrameKeyDown && !thisFrameKeyDown;
+        return lastFrameLastFrameKeyDown && !thisFrameKeyDown && !chatOpen();
+    }
+
+    private boolean chatOpen() {
+        if (MinecraftClient.getInstance().currentScreen == null) return false;
+        return MinecraftClient.getInstance().currentScreen instanceof ChatScreen;
     }
 
 }
