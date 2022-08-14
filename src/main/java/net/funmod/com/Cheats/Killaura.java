@@ -4,8 +4,10 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.funmod.com.Util.SimpleKeyBinding;
 import net.funmod.com.Util.Util;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 
@@ -20,6 +22,7 @@ public class Killaura {
         active = false;
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             assert MinecraftClient.getInstance().player != null;
+            ClientPlayerEntity clientPlayer = MinecraftClient.getInstance().player;
             keyBinding.update();
             if (keyBinding.wasPressed()) {
                 active = !active;
@@ -29,18 +32,19 @@ public class Killaura {
             if (active) {
                 assert MinecraftClient.getInstance().world != null;
                 Vec3d playerPos = MinecraftClient.getInstance().player.getPos();
-                List<PlayerEntity> players = MinecraftClient.getInstance().world.getEntitiesByClass(PlayerEntity.class,
+                var targetClass = LivingEntity.class;
+                var enemies = MinecraftClient.getInstance().world.getEntitiesByClass(targetClass,
                         new Box(playerPos.x - ENTITIY_SEARCH_RANGE, playerPos.y - ENTITIY_SEARCH_RANGE, playerPos.z - ENTITIY_SEARCH_RANGE,
-                                playerPos.x + ENTITIY_SEARCH_RANGE, playerPos.y + ENTITIY_SEARCH_RANGE, playerPos.z + ENTITIY_SEARCH_RANGE), PlayerEntity::isMainPlayer);
+                                playerPos.x + ENTITIY_SEARCH_RANGE, playerPos.y + ENTITIY_SEARCH_RANGE, playerPos.z + ENTITIY_SEARCH_RANGE), playerEntity -> playerEntity.getId() != clientPlayer.getId());
 
 
-                for (PlayerEntity player: players) {
-                    Vec3d otherPlayerPos = player.getPos();
-                    double distance = Math.abs(otherPlayerPos.x - playerPos.x + otherPlayerPos.y - playerPos.y + otherPlayerPos.z - playerPos.z);
-                    Util.displayMessage("distance from " + player.getName().getString() + " " + (int)distance + " blocks!");
+                for (var enemy: enemies) {
+                    Vec3d enemyPos = enemy.getPos();
+                    double distance = Math.abs(enemyPos.x - playerPos.x + enemyPos.y - playerPos.y + enemyPos.z - playerPos.z);
+                    Util.displayMessage("distance from " + enemy.getName().getString() + " " + (int)distance + " blocks!");
                     if (distance < 3) {
-                        MinecraftClient.getInstance().player.lookAt(player.getCommandSource().getEntityAnchor(), otherPlayerPos);
-                        MinecraftClient.getInstance().player.attack(player);
+                        clientPlayer.lookAt(enemy.getCommandSource().getEntityAnchor(), enemy.getBoundingBox().getCenter());
+                        clientPlayer.swingHand(clientPlayer.getActiveHand());
                     }
                 }
             }
@@ -48,4 +52,5 @@ public class Killaura {
             keyBinding.reset();
         });
     }
+
 }
