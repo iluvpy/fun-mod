@@ -5,6 +5,7 @@ import net.funmod.com.Render.Renderer;
 import net.funmod.com.Util.KeyboardEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.util.math.MatrixStack;
 import org.lwjgl.glfw.GLFW;
@@ -23,6 +24,7 @@ public class RenderMixin {
     private void render(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         Renderer.DrawText(matrices, "Fun mod", 20, 20, Renderer.getColor(255, 255, 255, 255));
         if (MinecraftClient.getInstance().player == null) return;
+       
 
 
     }
