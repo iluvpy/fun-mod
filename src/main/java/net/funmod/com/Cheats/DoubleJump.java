@@ -3,6 +3,7 @@ package net.funmod.com.Cheats;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.funmod.com.Util.SimpleKeyBinding;
+import net.funmod.com.Util.Util;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -31,7 +32,7 @@ public class DoubleJump {
             keyBinding.update();
             if (keyBinding.wasPressed()) {
                 active = !active;
-                client.player.sendMessage(Text.literal("Double Jump " + (active ? "Enabled" : "Disabled")));
+                Util.sendCheatActivation("Double Jump", active);
             }
             // if player is standing on something
             float offset = ((int)client.player.getY()) == client.player.getY() ? 0.01f : 0.0f;

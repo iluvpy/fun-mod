@@ -17,6 +17,7 @@ public class AntiCheatSafe {
             if (client.player == null) return;
             keyBinding.update();
             if (keyBinding.wasPressed()) {
+                // actívates anti cheat ant tps player back to a safe position (for most anti cheats)
                 client.player.setPos(client.player.getX(), client.player.getY()+3, client.player.getZ());
             }
             keyBinding.reset();

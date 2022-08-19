@@ -9,6 +9,7 @@ public class SimpleKeyBinding {
     boolean thisFrameKeyDown;
     boolean lastFrameLastFrameKeyDown;
 
+    public static final int UKNOWN_KEY = -1;
     public void setKeybinding(int keyCode) {
         keyCodeBinding = keyCode;
     }

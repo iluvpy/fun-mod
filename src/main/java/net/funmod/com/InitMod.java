@@ -2,7 +2,7 @@ package net.funmod.com;
 
 import net.fabricmc.api.ModInitializer;
 import net.funmod.com.Cheats.*;
-import net.funmod.com.Commands.ModCommands;
+import net.funmod.com.GUI.Gui;
 import net.funmod.com.Util.KeyboardEvents;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +21,7 @@ public class InitMod implements ModInitializer {
 
 		LOGGER.info("Hello Fabric world!");
 		KeyboardEvents.init();
-		ModCommands.register();
-		Scaffold.register();
-		Fly.registerFly();
-		DoubleJump.register();
-		AntiCheatSafe.register();
-		Killaura.register();
+		Cheats.registerModules();
+		Gui.init();
 	}
 }
